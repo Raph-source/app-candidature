@@ -10,3 +10,4 @@ A INSTALLER
 | **Envoi d’e‑mails (SMTP)**               | `secure-smtplib`  *(ou simplement la bibliothèque standard `smtplib` qui est incluse dans Python)* |
 | **Variables d’environnement**            | `python-dotenv`                                                                                    |
 | **Tests (optionnel)**                    | `pytest`, `pytest-asyncio`, `httpx`                                                                |
+| **validateur**                           | `pydantic[email]`|
