@@ -11,7 +11,7 @@ class Candidature(Base):
     status:     Mapped[bool] = mapped_column(default=True)
 
     id_candidat: Mapped[int] = mapped_column(ForeignKey("candidat.id"), nullable=False)
-    id_offre:    Mapped[int] = mapped_column(ForeignKey("offre.id"), nullable=False)
+    id_offre:    Mapped[int] = mapped_column(ForeignKey("offre.id"), nullable=True)
 
     candidat = relationship("Candidat", back_populates="candidatures")
     offre    = relationship("Offre", back_populates="candidatures")

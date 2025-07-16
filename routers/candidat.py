@@ -29,3 +29,8 @@ async def login(db: DBSession, payload: ValidateurLogin = Depends(ValidateurLogi
     if not ok:
         raise HTTPException(status_code=401, detail="Identifiants incorrects")
     return {"message": "Connexion réussie"}
+
+@router.get("/departement", status_code=201)
+async def login(db: DBSession,):
+    departement = await CandidatController.get_departement(db)
+    return departement

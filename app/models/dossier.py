@@ -12,5 +12,5 @@ class Dossier(Base):
     diplome:       Mapped[str]
     date_depot:    Mapped[date] = mapped_column(default=date.today)
 
-    id_candidat:   Mapped[int] = mapped_column(ForeignKey("candidat.id"), unique=True, nullable=False)
+    id_candidat:   Mapped[int] = mapped_column(ForeignKey("candidat.id"), nullable=False)
     candidat      = relationship("Candidat", back_populates="dossier")
