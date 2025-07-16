@@ -12,6 +12,10 @@ class ValidateurSignIn(BaseModel):
     email: EmailStr
     mdp: str
 
+class ValidateurLogin(BaseModel):
+    email: EmailStr
+    mdp: str
+
 def ValidateurSignInForm(
     nom: str = Form(...),
     post_nom: Optional[str] = Form(None),
@@ -27,7 +31,11 @@ def ValidateurSignInForm(
         mdp=mdp
     )
 
-
-class validateurLogin(BaseModel):
-    email: EmailStr
-    password: str
+def ValidateurLoginForm(
+    email: EmailStr = Form(...),
+    mdp: str = Form(...)
+) -> ValidateurLogin:
+    return ValidateurLogin(
+        email=email,
+        mdp=mdp
+    )

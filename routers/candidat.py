@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Form
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from validateur.candidat import ValidateurSignIn, ValidateurSignInForm, validateurLogin
+from validateur.candidat import *
 from database import AsyncSessionLocal
 from typing import AsyncGenerator
 
@@ -23,8 +23,8 @@ async def sign_up( db: DBSession, payload: ValidateurSignIn = Depends(Validateur
         raise HTTPException(status_code=409, detail="le compte exist")
     return reponse
 
-@router.post("/login")
-async def login(payload: validateurLogin, db: DBSession):
+@router.post("/login", status_code=201)
+async def login(db: DBSession, payload: ValidateurLogin = Depends(ValidateurLoginForm),):
     ok = await CandidatController.login(db, **payload.model_dump())
     if not ok:
         raise HTTPException(status_code=401, detail="Identifiants incorrects")
