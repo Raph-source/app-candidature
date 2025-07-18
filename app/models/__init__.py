@@ -1,5 +1,4 @@
 from .base import Base
-
 from .admin import Admin         
 from .candidat import Candidat   
 from .dossier import Dossier     

@@ -1,11 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-
+from sqlalchemy.orm import joinedload
 import logging
 from fastapi import HTTPException
 from datetime import date
+
 from app.models.admin import Admin as Admin_M
 from app.models.offre import Offre
+from app.models.candidature import Candidature
+from app.models.departement import Departement
+
+from app.dto.admin import AdminDTO
+from app.dto.offre import OffreDTO
+from app.dto.candidature import CandidatureDTO
+from app.dto.candidature import CandidatureDTO
+from app.dto.departement import DepartementDTO
 
 class Admin:
     @staticmethod
@@ -38,6 +47,32 @@ class Admin:
 
             return offre
         
+        except Exception as e:
+            print(e)
+            logging.exception("Erreur interne") 
+            raise HTTPException(
+                status_code=500,
+                detail="Erreur interne du serveur",
+            ) from e
+
+    async def get_candidature(session: AsyncSession, id_departement: int,):
+        """Retourne les candidatures"""
+        try:
+            stmt = (
+                select(Candidature)
+                .options(
+                    joinedload(Candidature.candidat),
+                    joinedload(Candidature.offre)
+                    .joinedload(Offre.departement)
+                    .joinedload(Departement.dossier)
+                )
+                .where(Offre.id_departement == id_departement)
+            )
+            
+            result = await session.execute(stmt)
+            candidatures = result.unique().scalars().all()
+            return candidatures
+
         except Exception as e:
             print(e)
             logging.exception("Erreur interne") 

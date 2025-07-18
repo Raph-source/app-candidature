@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Form
+from fastapi import APIRouter, Depends, HTTPException, Path
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -36,3 +36,9 @@ async def ajouter_offre(
 ):
     reponse =  await AdminController.ajouter_offre(db, **payload.model_dump())
     return reponse
+
+#==================== LES REQUETES GET ===================================
+@router.get("/candidatures/{id_departement}", status_code=200)
+async def get_candidature(db: DBSession, id_departement: int = Path(..., gt=0)):
+    candidature = await AdminController.get_candidature(db, id_departement)
+    return candidature

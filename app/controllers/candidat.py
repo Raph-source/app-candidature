@@ -8,6 +8,14 @@ from app.models.candidat import Candidat as Candidat_M
 from app.models.departement import Departement
 from app.models.dossier import Dossier
 from app.models.candidature import Candidature
+from app.models.offre import Offre
+
+from app.dto.candidat import CandidatDTO
+from app.dto.departement import DepartementDTO
+from app.dto.dossier import DossierDTO
+from app.dto.candidature import CandidatureDTO
+from app.dto.offre import OffreDTO
+
 
 class Candidat:
     #création du compte
@@ -101,6 +109,24 @@ class Candidat:
             await session.refresh(dossier)
 
             return True
+        except Exception as e:
+            print(e)
+            logging.exception("Erreur interne") 
+            raise HTTPException(
+                status_code=500,
+                detail="Erreur interne du serveur",
+            ) from e
+    
+    async def get_offre(session: AsyncSession):
+        """Retourne toutes les offres"""
+        try:
+            result = await session.execute(
+                select(Offre)
+            )
+
+            offres = result.scalars().all()
+            return offres
+    
         except Exception as e:
             print(e)
             logging.exception("Erreur interne") 

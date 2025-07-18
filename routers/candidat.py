@@ -68,7 +68,7 @@ async def ajouter_dossier(
     return {"message" : "dossier ajouté avec succès"}
 
 @router.post("/postuler", status_code=201)
-async def sign_up(
+async def set_candidature(
     db: DBSession,
     payload: ValidateurPostuler = Depends(ValidateurPostulerForm),
 ):
@@ -79,4 +79,9 @@ async def sign_up(
 @router.get("/departement", status_code=200)
 async def departement(db: DBSession,):
     departement = await CandidatController.get_departement(db)
+    return departement
+
+@router.get("/offres", status_code=200)
+async def get_offre(db: DBSession,):
+    departement = await CandidatController.get_offre(db)
     return departement

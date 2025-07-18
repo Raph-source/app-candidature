@@ -14,3 +14,4 @@ class Candidat(Base):
 
     dossier   = relationship("Dossier", back_populates="candidat", uselist=False)
     candidatures = relationship("Candidature", back_populates="candidat")
+
