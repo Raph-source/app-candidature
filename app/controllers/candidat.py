@@ -6,6 +6,7 @@ from fastapi import HTTPException
 
 from app.models.candidat import Candidat as Candidat_M
 from app.models.departement import Departement
+from app.models.dossier import Dossier
 
 class Candidat:
     #création du compte
@@ -46,7 +47,7 @@ class Candidat:
             candidat = result.scalar_one_or_none()
             if not candidat:
                 return False
-            return True
+            return candidat
         except Exception as e:
             print(e)
             logging.exception("Erreur interne") 
@@ -65,6 +66,40 @@ class Candidat:
             departement = result.scalar_one_or_none()
             
             return departement
+        except Exception as e:
+            print(e)
+            logging.exception("Erreur interne") 
+            raise HTTPException(
+                status_code=500,
+                detail="Erreur interne du serveur",
+            ) from e
+        
+    async def set_dossier(session: AsyncSession, id_candidat: int, id_departement: int, fichier: list,):
+        """ajoute le dossier du candidat"""
+        try:
+            #vérifier l'existance du candidat
+            result = await session.execute(
+                select(Candidat_M).where(Candidat_M.id==id_candidat)
+            )
+
+            candidat = result.scalars().all()
+
+            if len(candidat) < 1:
+                return False
+            
+            dossier = Dossier(
+                id_candidat=id_candidat,
+                id_departement=id_departement,
+                cv=fichier[0],
+                lettre_motivation=fichier[1],
+                diplome=fichier[2],
+            )
+
+            session.add(dossier)
+            await session.commit()
+            await session.refresh(dossier)
+
+            return True
         except Exception as e:
             print(e)
             logging.exception("Erreur interne") 

@@ -9,3 +9,4 @@ class Departement(Base):
     nom:       Mapped[str]  = mapped_column(String(100))
 
     offre = relationship("Offre", back_populates="departement")
+    dossier = relationship("Dossier", back_populates="departement")

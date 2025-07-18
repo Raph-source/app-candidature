@@ -1,11 +1,14 @@
 from pydantic import BaseModel, EmailStr
 
-from fastapi import Form
+from fastapi import UploadFile, Form, File
 from pydantic import EmailStr
 from typing import Optional
 from pydantic import BaseModel
+from typing import Annotated
+
 
 class ValidateurSignIn(BaseModel):
+    """validateur pour la création d'uun compte candidat"""
     nom: str
     post_nom: Optional[str]
     prenom: str
@@ -13,6 +16,7 @@ class ValidateurSignIn(BaseModel):
     mdp: str
 
 class ValidateurLogin(BaseModel):
+    """validateur d'authentification candidat et admin"""
     email: EmailStr
     mdp: str
 
@@ -39,3 +43,24 @@ def ValidateurLoginForm(
         email=email,
         mdp=mdp
     )
+
+class ValidateurUpload(BaseModel):
+    """validateur pour ajouter dossier"""
+    id_candidat: int
+    id_departement: int
+
+class FichiersUpload(BaseModel):
+    """validateur de cv lettre de motivation et diplome"""
+    cv: UploadFile
+    lettre_motivation: UploadFile
+    diplome: UploadFile
+
+
+def ValidateurUploadForm(
+    id_candidat: Annotated[int, Form(...)],
+    id_departement: Annotated[int, Form(...)],
+    cv: Annotated[UploadFile, File(...)],
+    lettre_motivation: Annotated[UploadFile, File(...)],
+    diplome: Annotated[UploadFile, File(...)]
+) -> tuple[ValidateurUpload, list[UploadFile]]:
+    return ValidateurUpload(id_candidat=id_candidat, id_departement=id_departement), [cv, lettre_motivation, diplome]

@@ -9,7 +9,6 @@ class Candidature(Base):
     id:         Mapped[int]  = mapped_column(primary_key=True)
     date_depot: Mapped[date] = mapped_column(default=date.today)
     status:     Mapped[bool] = mapped_column(default=True)
-
     id_candidat: Mapped[int] = mapped_column(ForeignKey("candidat.id"), nullable=False)
     id_offre:    Mapped[int] = mapped_column(ForeignKey("offre.id"), nullable=True)
 

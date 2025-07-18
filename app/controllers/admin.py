@@ -31,7 +31,7 @@ class Admin:
         try:
             
             #ajouter le candidat
-            offre = Offre(titre=titre, description=description, date_limite=date_limite, idDepartement=idDepartement)
+            offre = Offre(titre=titre, description=description, date_limite=date_limite, id_departement=idDepartement)
             session.add(offre)
             await session.commit()
             await session.refresh(offre)

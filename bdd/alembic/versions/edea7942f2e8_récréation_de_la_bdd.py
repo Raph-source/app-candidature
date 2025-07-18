@@ -1,8 +1,8 @@
-"""récréation de la bdd 
+"""récréation de la bdd
 
-Revision ID: fdfe334fada1
+Revision ID: edea7942f2e8
 Revises: 
-Create Date: 2025-07-16 23:15:46.739165
+Create Date: 2025-07-17 13:16:36.500409
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'fdfe334fada1'
+revision: str = 'edea7942f2e8'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -51,7 +51,9 @@ def upgrade() -> None:
     sa.Column('diplome', sa.String(), nullable=False),
     sa.Column('date_depot', sa.Date(), nullable=False),
     sa.Column('id_candidat', sa.Integer(), nullable=False),
+    sa.Column('id_departement', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['id_candidat'], ['candidat.id'], ),
+    sa.ForeignKeyConstraint(['id_departement'], ['departement.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('offre',

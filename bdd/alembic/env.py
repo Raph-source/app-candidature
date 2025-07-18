@@ -19,7 +19,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-# === AJOUTE ICI LES IMPORTS DE BASE ET DES MODÈLES ===
+# === IMPORTS DE BASE ET DES MODÈLES ===
 from app.models.base import Base
 from app.models.admin import Admin
 from app.models.candidat import Candidat
