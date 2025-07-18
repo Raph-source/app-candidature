@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from app.models.candidat import Candidat as Candidat_M
 from app.models.departement import Departement
 from app.models.dossier import Dossier
+from app.models.candidature import Candidature
 
 class Candidat:
     #création du compte
@@ -100,6 +101,24 @@ class Candidat:
             await session.refresh(dossier)
 
             return True
+        except Exception as e:
+            print(e)
+            logging.exception("Erreur interne") 
+            raise HTTPException(
+                status_code=500,
+                detail="Erreur interne du serveur",
+            ) from e
+        
+    async def postuler(session: AsyncSession, id_candidat: int, id_offre: int,):
+        """ajoute une candidature"""
+        try:
+            #ajouter la candidatue
+            candidature = Candidature(id_candidat=id_candidat, id_offre=id_offre,)
+            session.add(candidature)
+            await session.commit()
+            await session.refresh(candidature)
+
+            return candidature
         except Exception as e:
             print(e)
             logging.exception("Erreur interne") 

@@ -66,6 +66,15 @@ async def ajouter_dossier(
     if not reponse:
         raise HTTPException(status_code=400, detail=f"le candidat n'existe pas")
     return {"message" : "dossier ajouté avec succès"}
+
+@router.post("/postuler", status_code=201)
+async def sign_up(
+    db: DBSession,
+    payload: ValidateurPostuler = Depends(ValidateurPostulerForm),
+):
+    reponse =  await CandidatController.postuler(db, **payload.model_dump())
+    return reponse
+
 #==================== LES REQUETES GET ===================================
 @router.get("/departement", status_code=200)
 async def departement(db: DBSession,):
