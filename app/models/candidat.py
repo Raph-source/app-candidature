@@ -13,5 +13,5 @@ class Candidat(Base):
     mdp:       Mapped[str]  = mapped_column(String(50), nullable=False)
 
     dossier   = relationship("Dossier", back_populates="candidat", uselist=False)
-    candidatures = relationship("Candidature", back_populates="candidat")
+    candidature = relationship("Candidature", back_populates="candidat")
 

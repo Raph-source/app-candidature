@@ -69,12 +69,15 @@ class ValidateurPostuler(BaseModel):
     """validateur de postuler"""
     id_candidat: int
     id_offre: Optional[int] = None
+    id_departement: int
 
 def ValidateurPostulerForm(
     id_candidat: int = Form(...),
-    id_offre: Optional[int] = Form(None)
+    id_offre: Optional[int] = Form(None),
+    id_departement: int = Form(...),
 ) -> ValidateurPostuler:
     return ValidateurPostuler(
         id_candidat=id_candidat,
-        id_offre=id_offre
+        id_offre=id_offre,
+        id_departement=id_departement
     )

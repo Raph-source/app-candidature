@@ -18,16 +18,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-
-# === IMPORTS DE BASE ET DES MODÈLES ===
-from app.models.base import Base
-from app.models.admin import Admin
-from app.models.candidat import Candidat
-from app.models.offre import Offre
-from app.models.candidature import Candidature
-from app.models.departement import Departement  
-from app.models.dossier import Dossier  
-
+from app.models import Base  # importe ta Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

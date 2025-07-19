@@ -135,11 +135,11 @@ class Candidat:
                 detail="Erreur interne du serveur",
             ) from e
         
-    async def postuler(session: AsyncSession, id_candidat: int, id_offre: int,):
+    async def postuler(session: AsyncSession, id_candidat: int, id_offre: int, id_departement: int,):
         """ajoute une candidature"""
         try:
             #ajouter la candidatue
-            candidature = Candidature(id_candidat=id_candidat, id_offre=id_offre,)
+            candidature = Candidature(id_candidat=id_candidat, id_offre=id_offre, id_departement=id_departement)
             session.add(candidature)
             await session.commit()
             await session.refresh(candidature)

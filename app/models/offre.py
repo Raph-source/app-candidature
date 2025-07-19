@@ -13,4 +13,4 @@ class Offre(Base):
     id_departement: Mapped[int] = mapped_column(ForeignKey("departement.id"), nullable=False)
 
     departement = relationship("Departement", back_populates="offre")
-    candidatures = relationship("Candidature", back_populates="offre")
+    candidature = relationship("Candidature", back_populates="offre")

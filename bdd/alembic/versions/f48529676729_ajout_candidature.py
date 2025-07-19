@@ -1,8 +1,8 @@
-"""changement de status
+"""ajout candidature
 
-Revision ID: 718e36841127
-Revises: edea7942f2e8
-Create Date: 2025-07-18 12:37:43.971546
+Revision ID: f48529676729
+Revises: a7106cca23ee
+Create Date: 2025-07-19 20:48:15.124715
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '718e36841127'
-down_revision: Union[str, Sequence[str], None] = 'edea7942f2e8'
+revision: str = 'f48529676729'
+down_revision: Union[str, Sequence[str], None] = 'a7106cca23ee'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

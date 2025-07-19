@@ -62,11 +62,10 @@ class Admin:
                 select(Candidature)
                 .options(
                     joinedload(Candidature.candidat),
+                    joinedload(Candidature.departement),
                     joinedload(Candidature.offre)
-                    .joinedload(Offre.departement)
-                    .joinedload(Departement.dossier)
                 )
-                .where(Offre.id_departement == id_departement)
+                .where(Candidature.id_departement == id_departement)
             )
             
             result = await session.execute(stmt)

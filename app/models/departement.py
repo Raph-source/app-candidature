@@ -10,3 +10,4 @@ class Departement(Base):
 
     offre = relationship("Offre", back_populates="departement")
     dossier = relationship("Dossier", back_populates="departement")
+    candidature = relationship("Candidature", back_populates="departement")
