@@ -9,6 +9,7 @@ from app.models.admin import Admin as Admin_M
 from app.models.offre import Offre
 from app.models.candidature import Candidature
 from app.models.departement import Departement
+from app.models.dossier import Dossier
 
 from app.dto.admin import AdminDTO
 from app.dto.offre import OffreDTO
@@ -66,6 +67,7 @@ class Admin:
                     joinedload(Candidature.offre)
                 )
                 .where(Candidature.id_departement == id_departement)
+                .where(Candidature.status == False)
             )
             
             result = await session.execute(stmt)
@@ -79,3 +81,25 @@ class Admin:
                 status_code=500,
                 detail="Erreur interne du serveur",
             ) from e
+        
+    async def get_dossier(session: AsyncSession, id_candidat: int, id_departement: int,):
+        """Retourne le dossier d'un candidat"""
+        try:
+            stmt = (
+                select(Dossier)
+                .where(Dossier.id_candidat == id_candidat)
+                .where(Dossier.id_departement == id_departement)
+            )
+            
+            result = await session.execute(stmt)
+            dossier = result.unique().scalars().all()
+            return dossier
+
+        except Exception as e:
+            print(e)
+            logging.exception("Erreur interne") 
+            raise HTTPException(
+                status_code=500,
+                detail="Erreur interne du serveur",
+            ) from e
+    

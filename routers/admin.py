@@ -42,3 +42,12 @@ async def ajouter_offre(
 async def get_candidature(db: DBSession, id_departement: int = Path(..., gt=0)):
     candidature = await AdminController.get_candidature(db, id_departement)
     return candidature
+
+@router.get("/dossier/{id_candidat}/{id_departement}", status_code=200)
+async def get_candidature(
+    db: DBSession,
+    id_candidat: int = Path(..., gt=0),
+    id_departement: int = Path(..., gt=0)
+):
+    candidature = await AdminController.get_dossier(db, id_candidat, id_departement)
+    return candidature
