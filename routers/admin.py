@@ -44,7 +44,7 @@ async def get_candidature(db: DBSession, id_departement: int = Path(..., gt=0)):
     return candidature
 
 @router.get("/dossier/{id_candidat}/{id_departement}", status_code=200)
-async def get_candidature(
+async def get_dossier(
     db: DBSession,
     id_candidat: int = Path(..., gt=0),
     id_departement: int = Path(..., gt=0)
