@@ -28,3 +28,16 @@ def ValidateurAjouterOffreForm(
         date_limite=date_limite,
         idDepartement=idDepartement,
     )
+
+class ValidateurNotifierCandidat(BaseModel):
+    id_departement: int
+    texte: str
+
+def ValidateurNotifierCandidatForm(
+    id_departement: int = Form(...),
+    texte: str = Form(...),
+) -> ValidateurNotifierCandidat:
+    return ValidateurNotifierCandidat(
+        id_departement=id_departement,
+        texte=texte,
+    )

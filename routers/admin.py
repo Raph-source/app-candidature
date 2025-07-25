@@ -37,6 +37,14 @@ async def ajouter_offre(
     reponse =  await AdminController.ajouter_offre(db, **payload.model_dump())
     return reponse
 
+@router.post("/notifier-candidat", status_code=201)
+async def ajouter_offre(
+    db: DBSession,
+    payload: ValidateurNotifierCandidat = Depends(ValidateurNotifierCandidatForm),
+):
+    reponse =  await AdminController.notifier_candidats(db, **payload.model_dump())
+    return reponse
+
 #==================== LES REQUETES GET ===================================
 @router.get("/candidatures/{id_departement}", status_code=200)
 async def get_candidature(db: DBSession, id_departement: int = Path(..., gt=0)):
