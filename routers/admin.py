@@ -37,7 +37,7 @@ async def ajouter_offre(
     reponse =  await AdminController.ajouter_offre(db, **payload.model_dump())
     return reponse
 
-@router.post("/notifier-candidat", status_code=201)
+@router.post("/notifier-candidat", status_code=200)
 async def ajouter_offre(
     db: DBSession,
     payload: ValidateurNotifierCandidat = Depends(ValidateurNotifierCandidatForm),

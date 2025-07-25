@@ -10,6 +10,8 @@ import smtplib
 import ssl
 from email.message import EmailMessage
 import os
+from dotenv import load_dotenv
+
 from app.models.admin import Admin as Admin_M
 from app.models.offre import Offre
 from app.models.candidature import Candidature
@@ -117,8 +119,7 @@ class Admin:
             )
 
             emails_candidat = result.scalars().all()
-            print(emails_candidat)
-            
+
             for email in emails_candidat:
                 await Admin.envoyer_email_candidat(email, texte)
             return True
@@ -131,6 +132,7 @@ class Admin:
                 detail="Erreur interne du serveur",
             )
     async def envoyer_email_candidat(email: str, texte: str,):
+        load_dotenv()
         smtp_server = os.getenv("SMTP_HOST")
         smtp_port = os.getenv("SMTP_PORT")  # SSL
         sender_email = os.getenv("SMTP_USER")
