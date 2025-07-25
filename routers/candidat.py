@@ -73,7 +73,14 @@ async def set_candidature(
     payload: ValidateurPostuler = Depends(ValidateurPostulerForm),
 ):
     reponse =  await CandidatController.postuler(db, **payload.model_dump())
-    return reponse
+
+    if reponse == True:
+        return {"message" : "SUCCESS"}
+    elif reponse == False:
+        raise HTTPException(status_code=400, detail=f"FAILED")
+    else:
+        raise HTTPException(status_code=400, detail=f"département non trouvé")
+    
 
 #==================== LES REQUETES GET ===================================
 @router.get("/departement", status_code=200)
