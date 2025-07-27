@@ -143,9 +143,19 @@ class Candidat:
                 detail="Erreur interne du serveur",
             ) from e
         
-    async def postuler(session: AsyncSession, id_candidat: int, id_offre: int, id_departement: int,):
+    async def postuler(session: AsyncSession, id_candidat: int, id_offre: int, id_departement: int, fichier: list):
         """ajoute une candidature"""
         try:
+            #vérifier l'existance du candidat
+            result = await session.execute(
+                select(Candidat_M).where(Candidat_M.id==id_candidat)
+            )
+
+            candidat = result.scalars().all()
+
+            if len(candidat) < 1:
+                return "candidat not found"
+            
             result = await session.execute(
                 select(Departement.nom)
                 .where(Departement.id==id_departement)
@@ -154,10 +164,25 @@ class Candidat:
             nom_departement = result.scalars().one_or_none()
 
             if(nom_departement == 'informatique'):
-                return await Candidat.candidature_info(session, id_candidat, id_offre, id_departement)
+                response = await Candidat.candidature_info(session, id_candidat, id_offre, id_departement, fichier[0])
             else:
                 return "département non trouvé"
-                      
+            
+            #ajouter le dossier dans la bdd
+            dossier = Dossier(
+                id_candidat=id_candidat,
+                id_departement=id_departement,
+                cv=fichier[0],
+                lettre_motivation=fichier[1],
+                diplome=fichier[2],
+            )
+
+            session.add(dossier)
+            await session.commit()
+            await session.refresh(dossier)
+                              
+            return response
+    
         except Exception as e:
             print(e)
             logging.exception("Erreur interne") 
@@ -196,20 +221,11 @@ class Candidat:
 
         return [feature_diplome, feature_experience, feature_anglais, feature_programmation]
 
-    async def candidature_info(session: AsyncSession, id_candidat: int, id_offre: int, id_departement: int,):
+    async def candidature_info(session: AsyncSession, id_candidat: int, id_offre: int, id_departement: int, chemin_cv: str,):
         # Charger le modèle entraîné
         model = joblib.load("H:/app/storage/modele_informatique.pkl")
 
-        result = await session.execute(
-                        select(Dossier.cv)
-                        .where(Dossier.id_candidat==id_candidat)
-                        .where(Dossier.id_departement==id_departement)
-                    )
-
-        chemin_cv = result.scalars().one_or_none()
-        print(chemin_cv)
         chemin_cv = chemin_cv.replace('\\', '/')
-        print(chemin_cv)
         chemin_cv = "H:/app/" + chemin_cv
 
         #extraire le text du cv

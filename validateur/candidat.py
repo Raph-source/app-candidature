@@ -44,9 +44,10 @@ def ValidateurLoginForm(
         mdp=mdp
     )
 
-class ValidateurUpload(BaseModel):
-    """validateur pour ajouter dossier"""
+class ValidateurPostuler(BaseModel):
+    """validateur de postuler"""
     id_candidat: int
+    id_offre: int
     id_departement: int
 
 class FichiersUpload(BaseModel):
@@ -55,29 +56,13 @@ class FichiersUpload(BaseModel):
     lettre_motivation: UploadFile
     diplome: UploadFile
 
-
-def ValidateurUploadForm(
+def ValidateurPostulerForm(
     id_candidat: Annotated[int, Form(...)],
+    id_offre: Annotated[int, Form(...)],
     id_departement: Annotated[int, Form(...)],
     cv: Annotated[UploadFile, File(...)],
     lettre_motivation: Annotated[UploadFile, File(...)],
     diplome: Annotated[UploadFile, File(...)]
-) -> tuple[ValidateurUpload, list[UploadFile]]:
-    return ValidateurUpload(id_candidat=id_candidat, id_departement=id_departement), [cv, lettre_motivation, diplome]
+) -> tuple[ValidateurPostuler, list[UploadFile]]:
+    return ValidateurPostuler(id_candidat=id_candidat, id_departement=id_departement, id_offre=id_offre), [cv, lettre_motivation, diplome]
 
-class ValidateurPostuler(BaseModel):
-    """validateur de postuler"""
-    id_candidat: int
-    id_offre: Optional[int] = None
-    id_departement: int
-
-def ValidateurPostulerForm(
-    id_candidat: int = Form(...),
-    id_offre: Optional[int] = Form(None),
-    id_departement: int = Form(...),
-) -> ValidateurPostuler:
-    return ValidateurPostuler(
-        id_candidat=id_candidat,
-        id_offre=id_offre,
-        id_departement=id_departement
-    )

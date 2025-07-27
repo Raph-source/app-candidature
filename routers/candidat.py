@@ -43,10 +43,10 @@ async def login(
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-@router.post("/ajouter-dossier", status_code=201)
-async def ajouter_dossier(
+@router.post("/postuler", status_code=201)
+async def set_candidature(
     db: DBSession,
-    data: tuple[ValidateurUpload, List[UploadFile]] = Depends(ValidateurUploadForm),
+    data: tuple[ValidateurPostuler, List[UploadFile]] = Depends(ValidateurPostulerForm),
 ):
     payload, fichiers = data
     chemins = []
@@ -61,25 +61,28 @@ async def ajouter_dossier(
 
         chemins.append(chemin)
     
-    reponse = await CandidatController.set_dossier(db, payload.id_candidat, payload.id_departement, chemins,)
-
-    if not reponse:
-        raise HTTPException(status_code=400, detail=f"le candidat n'existe pas")
-    return {"message" : "dossier ajouté avec succès"}
-
-@router.post("/postuler", status_code=201)
-async def set_candidature(
-    db: DBSession,
-    payload: ValidateurPostuler = Depends(ValidateurPostulerForm),
-):
-    reponse =  await CandidatController.postuler(db, **payload.model_dump())
+    reponse = await CandidatController.postuler(db, payload.id_candidat, payload.id_departement, chemins,)
 
     if reponse == True:
         return {"message" : "SUCCESS"}
     elif reponse == False:
         raise HTTPException(status_code=400, detail=f"FAILED")
     else:
-        raise HTTPException(status_code=400, detail=f"département non trouvé")
+        raise HTTPException(status_code=400, detail=f"le candidat n'existe pas")
+
+# @router.post("/postuler", status_code=201)
+# async def set_candidature(
+#     db: DBSession,
+#     payload: ValidateurPostuler = Depends(ValidateurPostulerForm),
+# ):
+#     reponse =  await CandidatController.postuler(db, **payload.model_dump())
+
+#     if reponse == True:
+#         return {"message" : "SUCCESS"}
+#     elif reponse == False:
+#         raise HTTPException(status_code=400, detail=f"FAILED")
+#     else:
+#         raise HTTPException(status_code=400, detail=f"département non trouvé")
     
 
 #==================== LES REQUETES GET ===================================
