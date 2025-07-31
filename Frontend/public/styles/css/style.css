@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+  transition: all 0.3s ease-in-out;
+}
+
+html body .d-container-form {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+}
+html body .d-container-form .d-text {
+  width: 40em;
+}
+html body .d-container-form .d-text h3 {
+  font-size: 2.5em;
+  width: 11em;
+}
+html body .d-container-form .d-text h3 span {
+  color: #005bc2;
+}
+html body .d-container-form .d-text p {
+  font-size: 1.2em;
+  width: 25em;
+  margin-bottom: 1em;
+}
+html body .d-container-form .d-text p span {
+  color: #005bc2;
+  font-weight: 700;
+  font-size: 1.2em;
+}
+html body .d-container-form .d-form {
+  padding: 1em;
+  border-radius: 0.1em;
+  width: 30em;
+}
+html body .d-container-form .d-form input {
+  display: block;
+  margin-bottom: 0.8em;
+  width: 100%;
+  padding: 1.3em;
+  background-color: inherit;
+  border-radius: 1em;
+}
+html body .d-container-form .d-form .d-round {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+html body .d-container-form .d-form .d-round .d-input {
+  width: 100%;
+}
+html body .d-container-form .d-form .d-round .d-input input {
+  box-shadow: 0px 0px 3px #7c7c7c;
+  border: none;
+  outline: none;
+}
+html body .d-container-form .d-form .d-round .d-input input:focus {
+  background-color: #3b3b3b;
+  color: white;
+}
+html body .d-container-form .d-form .d-round .d-input label {
+  font-size: 0.9em;
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5em;
+}
+html body .d-container-form .d-form .d-round:nth-child(1) input {
+  width: 80%;
+}
+html body .d-container-form .d-form .d-round .d-input-login {
+  width: 80%;
+}
+html body .d-container-form .d-form input[type=submit] {
+  outline: none;
+  width: 65%;
+  border: none;
+  background-color: #005bc2;
+  color: white;
+  cursor: pointer;
+}
+html body .d-container {
+  height: 100vh;
+  width: 100vw;
+}
+html body .d-container .d-header {
+  padding: 0.5em;
+  height: 5em;
+  display: flex;
+  align-items: center;
+}
+html body .d-container .d-header h3 {
+  font-size: 1.8em;
+}
+html body .d-container .d-content {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1em;
+  padding: 3em;
+  height: 86.5%;
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
+html body .d-container .d-content .d-card-offre {
+  display: block;
+  padding: 0.8em;
+  text-decoration: none;
+  width: 19em;
+  max-height: 18em;
+  border-radius: 2em;
+  border: 1px solid black;
+  outline: none;
+}
+html body .d-container .d-content .d-card-offre .d-color {
+  border-radius: 2em;
+  display: block;
+  background-color: #ff8989;
+  height: 10em;
+  width: 100%;
+}
+html body .d-container .d-content .d-card-offre .d-bottom h3 {
+  font-size: 1.3em;
+  color: black;
+  margin-top: 0.5em;
+}
+html body .d-container .d-content .d-card-offre .d-bottom .d-span {
+  display: flex;
+  align-items: center;
+  margin-top: 0.3em;
+  gap: 0.5em;
+}
+html body .d-container .d-content .d-card-offre .d-bottom .d-span span {
+  display: block;
+}
+html body .d-container .d-content .d-card-offre .d-bottom .d-span span:nth-child(1) {
+  display: none;
+  border-radius: 50%;
+  height: 0.7em;
+  width: 0.7em;
+  background-color: red;
+}
+html body .d-container .d-content .d-card-offre .d-bottom .d-span span:nth-child(2) {
+  padding: 0.3em;
+  font-weight: 500;
+  color: black;
+  font-size: 0.8em;
+}
+
+/*# sourceMappingURL=style.css.map */
