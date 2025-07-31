@@ -1,5 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
+
 
 import joblib
 import re
@@ -80,7 +82,7 @@ class Candidat:
             result = await session.execute(
                 select(Departement)
             )
-            departement = result.scalar_one_or_none()
+            departement = result.scalars().all()
             
             return departement
         except Exception as e:
@@ -128,9 +130,14 @@ class Candidat:
     async def get_offre(session: AsyncSession):
         """Retourne toutes les offres"""
         try:
-            result = await session.execute(
-                select(Offre)
-            )
+            smtp = (
+                    select(Offre)
+                    .options(
+                        joinedload(Offre.departement)
+                    )
+                )
+            
+            result = await session.execute(smtp)
 
             offres = result.scalars().all()
             return offres
