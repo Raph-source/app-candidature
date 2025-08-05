@@ -19,6 +19,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 DBSession = Annotated[AsyncSession, Depends(get_db)]    
 
 #==================== LES REQUETES POST ===================================
+
 @router.post("/signup", status_code=201)
 async def sign_up(
     db: DBSession,
@@ -34,10 +35,10 @@ async def login(
     db: DBSession,
     payload: ValidateurLogin = Depends(ValidateurLoginForm),
 ):
-    ok = await CandidatController.login(db, **payload.model_dump())
-    if not ok:
+    candidat = await CandidatController.login(db, **payload.model_dump())
+    if not candidat:
         raise HTTPException(status_code=401, detail="Identifiants incorrects")
-    return {"message": "Connexion réussie"}
+    return {"message": candidat}
 
 #création du dossier uploads
 UPLOAD_DIR = "uploads"

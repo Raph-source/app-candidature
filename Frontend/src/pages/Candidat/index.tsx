@@ -1,109 +1,26 @@
-import {Link} from "react-router-dom";
+import {CardOffre} from "../../components/cardOffre.tsx";
+import UseGlobal, {type InterfaceOffres} from "../../hooks/useGlobal.ts";
+import {useEffect, useState} from "react";
 
 export const Index = () => {
+    const {checkCandidat,getOffre} = UseGlobal()
+    const [offres, setOffres] = useState()
+    useEffect(() => {
+        checkCandidat()
+        getOffre(setOffres)
+
+    }, []);
+    console.log(offres)
+
     return (
         <div className={"d-container"}>
             <div className={"d-header"}>
                 <h3>Offres<span>App</span></h3>
             </div>
             <div className={"d-content"}>
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
-
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
-                <Link className={"d-card-offre"} to={"#"}>
-                    <div className={"d-color"}>
-
-                    </div>
-                    <div className={"d-bottom"}>
-                        <h3>offre pour un post de développeur</h3>
-                        <div className={"d-span"}>
-                            <span className={"d-round-color"}></span>
-                            <span>05-10-2005</span>
-                        </div>
-                    </div>
-                </Link>
+                {
+                    offres && offres.map((offre) => <CardOffre offre={offre}  /> )
+                }
             </div>
         </div>
     );
