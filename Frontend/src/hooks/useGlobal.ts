@@ -72,7 +72,7 @@ const UseGlobal =  () => {
             await axiosSend("post", url,data)
             await axios.post(`${urlComplet}`, data, {
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Content-Type": "multipart/form-data"
                     }
             })
             alert('Vous avez postuler !!')
