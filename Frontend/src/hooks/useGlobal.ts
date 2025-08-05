@@ -31,6 +31,7 @@ const UseGlobal =  () => {
             navigate("/")
         }
     }
+
     const axiosSend = async (action : string, url : string, data? : FieldValues) => {
         const urlComplet =  racine+url
         try {
@@ -58,6 +59,24 @@ const UseGlobal =  () => {
             localStorage.setItem("candidat" ,response.data.message.id)
             navigate("/candidat/accueil")
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        }catch (e) {
+            alert("Erreur : Vous n'avez pas un compte")
+        }
+    }
+    const postuler = async (data : FieldValues) =>{
+        const url = "candidat/postuler"
+        const urlComplet =  racine+url
+        try {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            await axiosSend("post", url,data)
+            await axios.post(`${urlComplet}`, data, {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    }
+            })
+            alert('Vous avez postuler !!')
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }catch (e) {
             alert("Erreur : Vous n'avez pas un compte")
         }
@@ -111,7 +130,7 @@ const UseGlobal =  () => {
         }
     }
 
-    return {connexion, creerUnCompte,getOffre,
+    return {connexion, creerUnCompte,getOffre,postuler,
         checkAdmin, checkCandidat, getOneOffres}
 }
 

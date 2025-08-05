@@ -43,7 +43,7 @@ export const DetailsOffre = ({offre}  : InterfaceOffreDetails) => {
                     <div className={"d-badges"}>
                         <span>{offre.departement.nom}</span><span>{offre.date_limite}</span>
                     </div>
-                    <Link to={`/candidat/postuler/${offre.id}`}>Postuler</Link>
+                    <Link to={`/candidat/postuler/${offre.id}/${offre.id_departement}`}>Postuler</Link>
                 </div>
             </div>
         </div>

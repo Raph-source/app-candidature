@@ -1,11 +1,20 @@
 import {Text} from "../../components/form/text.tsx";
 import {Input} from "../../components/form/input.tsx";
 import {type FieldValues, useForm} from "react-hook-form";
+import {useParams} from "react-router-dom";
+import useGlobal from "../../hooks/useGlobal.ts";
+import {useEffect} from "react";
 
 export const Postuler = () => {
     const {register, handleSubmit} = useForm()
+    const {idoffre,idepartement } = useParams()
+    const {postuler, checkCandidat} = useGlobal()
+    useEffect(() => {
+        checkCandidat()
+    }, []);
     const onSubmit = (data : FieldValues) => {
-        console.log(data)
+        const Ndata = {...data, id_departement : idepartement , id_offre  : idoffre, id_candidat : localStorage.getItem('candidat')}
+        postuler(Ndata)
     }
     return (
         <div className={"d-container-form"}>

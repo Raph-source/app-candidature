@@ -4,7 +4,7 @@ import {useForm} from "react-hook-form";
 
 export const AjouterOffre = () => {
     const {register, handleSubmit} = useForm()
-
+    c
     return (
         <div className={"d-container-form"}>
             <Text title={<h3><span>Connectez vous</span> pour profiter</h3>}
