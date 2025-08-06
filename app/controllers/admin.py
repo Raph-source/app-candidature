@@ -1,4 +1,4 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 import logging
@@ -14,9 +14,9 @@ from dotenv import load_dotenv
 
 from app.models.admin import Admin as Admin_M
 from app.models.offre import Offre
-from app.models.candidature import Candidature
-from app.models.departement import Departement
-from app.models.dossier import Dossier
+from app.models.detailPostuler import DetailPostuler
+from app.models.poste import Poste
+from app.models.cv import Cv
 from app.models.candidat import Candidat
 
 from app.dto.admin import AdminDTO
@@ -27,11 +27,11 @@ from app.dto.departement import DepartementDTO
 
 class Admin:
     @staticmethod
-    async def login(session: AsyncSession, email: str,mdp: str,) -> bool:
+    async def login(session: Session, login: str, mdp: str,) -> bool:
         """Retourne True si les identifiants sont corrects."""
         try:
-            result = await session.execute(
-                select(Admin_M).where(Admin_M.email == email, Admin_M.mdp == mdp)
+            result = session.execute(
+                select(Admin_M).where(Admin_M.nom == login, Admin_M.mdp == mdp)
             )
             admin = result.scalar_one_or_none()
             if not admin:
@@ -45,14 +45,26 @@ class Admin:
                 detail="Erreur interne du serveur",
             ) from e
 
-    async def ajouter_offre(session: AsyncSession, titre: str, description: str, date_limite: date, idDepartement: int) -> Admin_M:
+    async def ajouter_offre(
+        session: Session,
+        titre: str,
+        description: str,
+        date_limite: date,
+        id_poste: int,
+        id_contrat: int,
+    ) -> Admin_M:
         try:
-            
             #ajouter le candidat
-            offre = Offre(titre=titre, description=description, date_limite=date_limite, id_departement=idDepartement)
+            offre = Offre(
+                titre=titre,
+                description=description,
+                date_limite=date_limite,
+                id_poste=id_poste,
+                id_contrat=id_contrat
+            )
             session.add(offre)
-            await session.commit()
-            await session.refresh(offre)
+            session.commit()
+            session.refresh(offre)
 
             return offre
         
@@ -64,21 +76,20 @@ class Admin:
                 detail="Erreur interne du serveur",
             ) from e
 
-    async def get_candidature(session: AsyncSession, id_departement: int,):
+    async def get_candidature(session: Session, id_poste: int,):
         """Retourne les candidatures"""
         try:
             stmt = (
-                select(Candidature)
+                select(DetailPostuler)
                 .options(
-                    joinedload(Candidature.candidat),
-                    joinedload(Candidature.departement),
-                    joinedload(Candidature.offre)
+                    joinedload(DetailPostuler.candidat),
+                    joinedload(DetailPostuler.poste),
+                    joinedload(DetailPostuler.offre)
                 )
-                .where(Candidature.id_departement == id_departement)
-                .where(Candidature.status == False)
+                .where(DetailPostuler.id_poste == id_poste)
             )
             
-            result = await session.execute(stmt)
+            result =  session.execute(stmt)
             candidatures = result.unique().scalars().all()
             return candidatures
 
@@ -90,17 +101,17 @@ class Admin:
                 detail="Erreur interne du serveur",
             ) from e
         
-    async def get_dossier(session: AsyncSession, id_candidat: int, id_departement: int,):
+    async def get_dossier(session: Session, id_candidat: int, id_poste: int,):
         """Retourne le dossier d'un candidat"""
         try:
             stmt = (
-                select(Dossier)
-                .where(Dossier.id_candidat == id_candidat)
-                .where(Dossier.id_departement == id_departement)
+                select(Cv)
+                .where(Cv.id_candidat == id_candidat)
+                .where(Cv.id_poste == id_poste)
             )
             
-            result = await session.execute(stmt)
-            dossier = result.unique().scalars().all()
+            result =  session.execute(stmt)
+            dossier = result.unique().scalars().first()
             return dossier
 
         except Exception as e:
@@ -111,11 +122,10 @@ class Admin:
                 detail="Erreur interne du serveur",
             ) from e
     
-    async def notifier_candidats(session: AsyncSession, id_departement: int, texte: str,):
+    async def notifier_candidats(session: Session, texte: str,):
         try:
-            result = await session.execute(
+            result = session.execute(
                 select(Candidat.email)
-                .where(Departement.id == id_departement)
             )
 
             emails_candidat = result.scalars().all()
@@ -131,6 +141,28 @@ class Admin:
                 status_code=500,
                 detail="Erreur interne du serveur",
             )
+
+    async def bloquer_debloquer_liste_candidats():
+        try:
+            chemin = os.path.join("bdd/liste.txt")
+            with open(chemin, "r") as f:
+                contenu = f.read()
+            if contenu == "oui":
+                with open(chemin, "w", encoding="utf-8") as f:
+                    f.write("non")
+            else:
+                with open(chemin, "w", encoding="utf-8") as f:
+                    f.write("oui")
+            return True
+        
+        except Exception as e:
+            print(e)
+            logging.exception("Erreur interne") 
+            raise HTTPException(
+                status_code=500,
+                detail="Erreur interne du serveur",
+            )
+        
     async def envoyer_email_candidat(email: str, texte: str,):
         load_dotenv()
         smtp_server = os.getenv("SMTP_HOST")

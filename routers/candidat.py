@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path
 from typing import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 from typing import List
 import os
 
 from validateur.candidat import *
-from database import AsyncSessionLocal
+from database import SessionLocal
 from typing import AsyncGenerator
 
 from app.controllers.candidat import Candidat as CandidatController
@@ -13,8 +14,11 @@ from app.controllers.candidat import Candidat as CandidatController
 router = APIRouter(prefix="/candidat", tags=["Candidat"])
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    async with AsyncSessionLocal() as session:
-        yield session
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 DBSession = Annotated[AsyncSession, Depends(get_db)]    
 
@@ -22,77 +26,57 @@ DBSession = Annotated[AsyncSession, Depends(get_db)]
 
 @router.post("/signup", status_code=201)
 async def sign_up(
-    db: DBSession,
+    db: Session = Depends(get_db),
     payload: ValidateurSignIn = Depends(ValidateurSignInForm),
 ):
     reponse =  await CandidatController.sign_in(db, **payload.model_dump())
+    
     if not reponse:
         raise HTTPException(status_code=409, detail="le compte exist")
     return reponse
 
 @router.post("/login", status_code=200)
 async def login(
-    db: DBSession,
+    db: Session = Depends(get_db),
     payload: ValidateurLogin = Depends(ValidateurLoginForm),
 ):
     candidat = await CandidatController.login(db, **payload.model_dump())
     if not candidat:
         raise HTTPException(status_code=401, detail="Identifiants incorrects")
-    return {"message": candidat}
-
-#création du dossier uploads
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+    return candidat
 
 @router.post("/postuler", status_code=201)
 async def set_candidature(
-    db: DBSession,
-    data: tuple[ValidateurPostuler, List[UploadFile]] = Depends(ValidateurPostulerForm),
+    db: Session = Depends(get_db),
+    payload: ValidateurPostuler = Depends(ValidateurPostulerForm),
 ):
-    payload, fichiers = data
-    chemins = []
 
-    for idx, fichier in enumerate(fichiers, start=1):
-        if not fichier.filename.lower().endswith(".pdf"):
-            raise HTTPException(status_code=400, detail=f"Le fichier {idx} n'est pas un PDF valide.")
-
-        chemin = os.path.join(UPLOAD_DIR, f"{payload.id_candidat}{payload.id_departement}_fichier{idx}.pdf")
-        with open(chemin, "wb") as f:
-            f.write(await fichier.read())
-
-        chemins.append(chemin)
-    
-    reponse = await CandidatController.postuler(db, payload.id_candidat, payload.id_departement, chemins,)
+    reponse = await CandidatController.postuler(db, **payload.model_dump())
 
     if reponse == True:
         return {"message" : "SUCCESS"}
     elif reponse == False:
-        raise HTTPException(status_code=400, detail=f"FAILED")
-    else:
+        raise HTTPException(status_code=400, detail=f"cv non conforme")
+    elif reponse == "candidat not found":
         raise HTTPException(status_code=400, detail=f"le candidat n'existe pas")
-
-# @router.post("/postuler", status_code=201)
-# async def set_candidature(
-#     db: DBSession,
-#     payload: ValidateurPostuler = Depends(ValidateurPostulerForm),
-# ):
-#     reponse =  await CandidatController.postuler(db, **payload.model_dump())
-
-#     if reponse == True:
-#         return {"message" : "SUCCESS"}
-#     elif reponse == False:
-#         raise HTTPException(status_code=400, detail=f"FAILED")
-#     else:
-#         raise HTTPException(status_code=400, detail=f"département non trouvé")
-    
+    elif reponse == "fichier non pdf":
+        raise HTTPException(status_code=400, detail=f"fichier non pdf")
+    elif reponse == "département non trouvé":
+        raise HTTPException(status_code=400, detail=f"département non trouvé")
 
 #==================== LES REQUETES GET ===================================
 @router.get("/departement", status_code=200)
-async def departement(db: DBSession,):
+async def departement(db: Session = Depends(get_db),):
     departement = await CandidatController.get_departement(db)
     return departement
 
 @router.get("/offres", status_code=200)
-async def get_offre(db: DBSession,):
+async def get_offre(db: Session = Depends(get_db),):
     departement = await CandidatController.get_offre(db)
     return departement
+
+@router.get("/candidat-retenu/{id_poste}", status_code=200)
+async def get_candidat_retenu(db: Session = Depends(get_db), id_poste: int = Path(..., gt=0)):
+    candidature = await CandidatController.get_candidature(db, id_poste)
+    return candidature
+

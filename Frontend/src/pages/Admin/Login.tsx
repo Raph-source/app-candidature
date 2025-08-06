@@ -4,11 +4,11 @@ import {type FieldValues, useForm} from "react-hook-form";
 import UseGlobal from "../../hooks/useGlobal.ts";
 
 
-export const Login = () => {
+export const LoginAdmin = () => {
     const {register, handleSubmit} = useForm()
     const {connexion} = UseGlobal()
     const onSubmit = (data: FieldValues) => {
-        connexion(data,"candidat")
+        connexion(data,"admin")
     }
     
     return (

@@ -5,42 +5,55 @@ from pydantic import EmailStr
 from typing import Optional
 from pydantic import BaseModel
 from typing import Annotated
+from datetime import date
 
 
 class ValidateurSignIn(BaseModel):
     """validateur pour la création d'uun compte candidat"""
     nom: str
-    post_nom: Optional[str]
-    prenom: str
+    lieu: str
+    date_naiss: date
+    etat_civ: str
+    age: int
+    nationalite: str
     email: EmailStr
+    login: str
     mdp: str
 
 class ValidateurLogin(BaseModel):
     """validateur d'authentification candidat et admin"""
-    email: EmailStr
+    login: str
     mdp: str
 
 def ValidateurSignInForm(
     nom: str = Form(...),
-    post_nom: Optional[str] = Form(None),
-    prenom: str = Form(...),
+    lieu: str = Form(...),
+    date_naiss: date = Form(...),
+    etat_civ: str = Form(...),
+    age: int = Form(...),
+    nationalite: str = Form(...),
     email: EmailStr = Form(...),
-    mdp: str = Form(...)
+    login: str = Form(...),
+    mdp: str = Form(...),
 ) -> ValidateurSignIn:
     return ValidateurSignIn(
         nom=nom,
-        post_nom=post_nom,
-        prenom=prenom,
+        lieu=lieu,
+        date_naiss=date_naiss,
+        etat_civ=etat_civ,
+        age=age,
+        nationalite=nationalite,
         email=email,
+        login=login,
         mdp=mdp
     )
 
 def ValidateurLoginForm(
-    email: EmailStr = Form(...),
+    login: str = Form(...),
     mdp: str = Form(...)
 ) -> ValidateurLogin:
     return ValidateurLogin(
-        email=email,
+        login=login,
         mdp=mdp
     )
 
@@ -48,21 +61,19 @@ class ValidateurPostuler(BaseModel):
     """validateur de postuler"""
     id_candidat: int
     id_offre: int
-    id_departement: int
-
-class FichiersUpload(BaseModel):
-    """validateur de cv lettre de motivation et diplome"""
+    id_poste: int
     cv: UploadFile
-    lettre_motivation: UploadFile
-    diplome: UploadFile
 
 def ValidateurPostulerForm(
     id_candidat: Annotated[int, Form(...)],
     id_offre: Annotated[int, Form(...)],
-    id_departement: Annotated[int, Form(...)],
+    id_poste: Annotated[int, Form(...)],
     cv: Annotated[UploadFile, File(...)],
-    lettre_motivation: Annotated[UploadFile, File(...)],
-    diplome: Annotated[UploadFile, File(...)]
-) -> tuple[ValidateurPostuler, list[UploadFile]]:
-    return ValidateurPostuler(id_candidat=id_candidat, id_departement=id_departement, id_offre=id_offre), [cv, lettre_motivation, diplome]
+) -> ValidateurPostuler:
+    return ValidateurPostuler(
+        id_candidat=id_candidat,
+        id_poste=id_poste,
+        id_offre=id_offre,
+        cv=cv
+    )
 

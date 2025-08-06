@@ -10,6 +10,7 @@ import {Details} from "./pages/Candidat/details.tsx";
 import {Postuler} from "./pages/Candidat/postuler.tsx";
 import {AjouterOffre} from "./pages/Admin/ajouterOffre.tsx";
 import {ChearchElement} from "./pages/Admin/chearchElement.tsx";
+import { LoginAdmin } from './pages/Admin/Login.tsx';
 
 const router = createBrowserRouter([
     {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
     {
         path : "/admin/",
         children : [
+            {
+                path : "login",
+                element : <LoginAdmin/>
+            },
             {
                 path : "accueil",
                 element : <IndexAdmin/>

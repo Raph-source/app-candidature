@@ -43,21 +43,29 @@ const UseGlobal =  () => {
             return  response
         }
         catch (e) {
-            alert('Erreur')
             console.log(e)
             return  e
         }
     }
-    const connexion = async ( data : FieldValues) =>{
-        const url = "candidat/login"
+    const connexion = async ( data : FieldValues, type : string) =>{
+    
         console.log(data)
         try {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            const response = await axiosSend("post", url,data)
-            console.log(response)
-            localStorage.setItem("candidat" ,response.data.message.id)
-            navigate("/candidat/accueil")
+            if (type === "candidat") {
+                const url = "candidat/login"
+                const response = await axiosSend("post", url,data)
+                console.log(response)
+                localStorage.setItem("candidat" ,response.data.message.id)
+                navigate("/candidat/accueil")
+            }else{
+                const url = "admin/login"
+                const response = await axiosSend("post", url,data)
+                console.log(response)
+                localStorage.setItem("admin" ,response.data.message.id)
+                navigate("/admin/accueil")
+            }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }catch (e) {
             alert("Erreur : Vous n'avez pas un compte")

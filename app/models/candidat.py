@@ -7,11 +7,14 @@ class Candidat(Base):
 
     id:        Mapped[int]  = mapped_column(primary_key=True)
     nom:       Mapped[str]  = mapped_column(String(50))
-    post_nom:  Mapped[str]  = mapped_column(String(50))
-    prenom:    Mapped[str]  = mapped_column(String(50))
+    lieu:       Mapped[str]  = mapped_column(String(50))
+    etat_civ:       Mapped[str]  = mapped_column(String(50))
+    age:       Mapped[int]
+    date_naiss:  Mapped[str] = mapped_column(String(50))
     email:     Mapped[str]  = mapped_column(String(50), unique=True, nullable=False)
-    mdp:       Mapped[str]  = mapped_column(String(50), nullable=False)
+    nationalite:       Mapped[str]  = mapped_column(String(50), nullable=False)
 
-    dossier   = relationship("Dossier", back_populates="candidat", uselist=False)
-    candidature = relationship("Candidature", back_populates="candidat")
+    compte      = relationship("Compte", back_populates="candidat")
+    cv   = relationship("Cv", back_populates="candidat", uselist=False)
+    detailPostuler = relationship("DetailPostuler", back_populates="candidat")
 

@@ -2,7 +2,7 @@ A INSTALLER
 | Catégorie                                | Paquets PyPI à installer                                                                           |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | **Framework & serveur**                  | `fastapi` & `uvicorn`                                                                              |
-| **Base de données SQLite (async)**       | `sqlalchemy`, `aiosqlite`, `alembic`                                                                         |
+| **Base de données mysql (async)**       | `sqlalchemy`, `pymysql`, `alembic`                                                                         |
 | **Schémas de données**                   | `pydantic>=2.0`                                                                                    |
 | **Machine Learning (arbre de décision)** | `scikit-learn` & `pandas`                                                                          |
 | **Sauvegarde du modèle**                 | `joblib` (déjà inclus dans scikit‑learn mais précisé)                                              |

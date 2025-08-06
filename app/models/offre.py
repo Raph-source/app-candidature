@@ -8,9 +8,11 @@ class Offre(Base):
 
     id:          Mapped[int]  = mapped_column(primary_key=True)
     titre:       Mapped[str]  = mapped_column(String(255), nullable=False)
-    description: Mapped[str]
+    description: Mapped[str]  = mapped_column(String(255), nullable=False)
     date_limite: Mapped[date]
-    id_departement: Mapped[int] = mapped_column(ForeignKey("departement.id"), nullable=False)
+    id_poste: Mapped[int] = mapped_column(ForeignKey("poste.id"), nullable=False)
+    id_contrat: Mapped[int] = mapped_column(ForeignKey("contrat.id"), nullable=False)
 
-    departement = relationship("Departement", back_populates="offre")
-    candidature = relationship("Candidature", back_populates="offre")
+    poste = relationship("Poste", back_populates="offre")
+    contrat = relationship("Contrat", back_populates="offre")
+    detailPostuler = relationship("DetailPostuler", back_populates="offre")

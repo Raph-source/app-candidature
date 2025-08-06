@@ -1,9 +1,11 @@
 from .base import Base
 from .admin import Admin         
 from .candidat import Candidat   
-from .dossier import Dossier     
+from .cv import Cv     
 from .offre import Offre         
-from .candidature import Candidature
-from .departement import Departement
+from .detailPostuler import DetailPostuler
+from .poste import Poste
+from .compte import Compte
+from .contrat import Contrat
 
-__all__ = ["Base", "Admin", "Candidat", "Dossier", "Offre", "Candidature", "Departement"]
+__all__ = ["Base", "Admin", "Candidat", "Cv", "Offre", "DetailPostuler", "Poste", "Compte", "Contrat"]

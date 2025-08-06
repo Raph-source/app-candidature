@@ -1,13 +1,13 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date
 from fastapi import Form, HTTPException
-from typing import Optional
 
 class ValidateurAjouterOffre(BaseModel):
     titre: str
     description: str
     date_limite: date
-    idDepartement: int 
+    id_poste: int
+    id_contrat: int
 
     @field_validator("date_limite")
     @classmethod
@@ -20,24 +20,23 @@ def ValidateurAjouterOffreForm(
     titre: str = Form(...),
     description: str = Form(...),
     date_limite: date = Form(...),
-    idDepartement: int = Form(...)
+    id_poste: int = Form(...),
+    id_contrat: int = Form(...),
 ) -> ValidateurAjouterOffre:
     return ValidateurAjouterOffre(
         titre=titre,
         description=description,
         date_limite=date_limite,
-        idDepartement=idDepartement,
+        id_poste=id_poste,
+        id_contrat=id_contrat,
     )
 
 class ValidateurNotifierCandidat(BaseModel):
-    id_departement: int
     texte: str
 
 def ValidateurNotifierCandidatForm(
-    id_departement: int = Form(...),
     texte: str = Form(...),
 ) -> ValidateurNotifierCandidat:
     return ValidateurNotifierCandidat(
-        id_departement=id_departement,
         texte=texte,
     )
